@@ -7,35 +7,36 @@ import moedeiro.validator.ValidarMoedasValidator;
 public class TuboMoeda {
 	
 	// Atributos
-	private double valor;
+	private double valorMoeda;
 	private int quantidade;
-	private int capacidadeMaxima = 200;
+	private int CAPACIDADE_MAXIMA = 200;
 	private DecimalFormat df = new DecimalFormat("0.00");
+	private Cofre CofreMoedas;
 	
 	// Gets e Sets
-	public double getValor() {
-		return valor;
-	}
-
 	public int getQuantidade() {
 		return quantidade;
 	}
 
-	public int getCapacidadeMaxima() {
-		return capacidadeMaxima;
-	}
-	
 	// Construtor
-	public TuboMoeda(double valor) {
-		super();
-		this.valor = valor;
+	public TuboMoeda(double valorMoeda, Cofre CofreMoedas) {
+		this.valorMoeda = valorMoeda;
 		this.quantidade = 0;
+		this.CofreMoedas = CofreMoedas;
 	}
 	
 	// Comportamentos
 	public int adicionarMoeda(int adicionar){
 		if (ValidarMoedasValidator.validarQuantidade(adicionar)) {
-            quantidade += adicionar;
+            if (quantidade + adicionar <= CAPACIDADE_MAXIMA) {
+            	quantidade += adicionar;
+            } else {
+            	int excesso = quantidade + adicionar - CAPACIDADE_MAXIMA;
+            	quantidade = CAPACIDADE_MAXIMA;
+            	CofreMoedas.adicionarMoeda(valorMoeda, excesso);
+            }
+        } else {
+        	// erro: valor inserido negativo
         }
 		return quantidade;
     }
@@ -47,7 +48,7 @@ public class TuboMoeda {
 	}
 	
 	public String CalcularValorTotal() {
-		double valorTotal = valor * quantidade;
+		double valorTotal = valorMoeda * quantidade;
 		return df.format(valorTotal);
 	}
 	
