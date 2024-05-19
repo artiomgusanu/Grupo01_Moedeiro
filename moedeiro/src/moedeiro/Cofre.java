@@ -8,7 +8,6 @@ public class Cofre {
 	
 	// Atributos
 	private Map <Double, Integer> moedasArmazenadas;
-	private DecimalFormat df = new DecimalFormat("0.00");
 
 	// Gets e Sets
 	
@@ -28,13 +27,28 @@ public class Cofre {
         }
     }
 
-    public String calcularValorTotal() {
+    public double calcularValorTotal() {
         double valorTotal = 0;
         for (Map.Entry<Double, Integer> entry : moedasArmazenadas.entrySet()) {
             valorTotal += entry.getKey() * entry.getValue();
         }
-        return df.format(valorTotal);
+        return valorTotal;
     }
+    
+    // Método para contar o número de moedas de cada tipo						(REVER)
+    public Map<Double, Integer> contarMoedasPorTipo() {
+        return new HashMap<>(moedasArmazenadas);
+    }
+    
+    // Método para contar o número total de moedas no cofre						(REVER)
+    public int contarTotalMoedas() {
+        int totalMoedas = 0;
+        for (int quantidade : moedasArmazenadas.values()) {
+            totalMoedas += quantidade;
+        }
+        return totalMoedas;
+    }
+
     
 	// Outras
 

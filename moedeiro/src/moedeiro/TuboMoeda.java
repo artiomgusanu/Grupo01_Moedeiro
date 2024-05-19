@@ -1,6 +1,6 @@
 package moedeiro;
 
-import java.text.DecimalFormat;
+import java.util.Map;
 
 import moedeiro.validator.ValidarMoedasValidator;
 
@@ -10,12 +10,15 @@ public class TuboMoeda {
 	private double valorMoeda;
 	private int quantidade;
 	private int CAPACIDADE_MAXIMA = 200;
-	private DecimalFormat df = new DecimalFormat("0.00");
 	private Cofre CofreMoedas;
 	
 	// Gets e Sets
 	public int getQuantidade() {
 		return quantidade;
+	}
+	
+	public double getValorMoeda() {
+		return valorMoeda;
 	}
 
 	// Construtor
@@ -47,17 +50,21 @@ public class TuboMoeda {
 		}
 	}
 	
-	public String CalcularValorTotal() {
+	public double CalcularValorTotal() {
 		double valorTotal = valorMoeda * quantidade;
-		return df.format(valorTotal);
+		return valorTotal;
 	}
 	
-//	public int validarQuantidadeInserida() {
-//		if (adicionar > 0 || adicionar < capacidadeMaxima) {
-//			return adicionar;
-//		}
-//		return adicionar;
-//	}
+	// Verificar se o cofre ainda tem o mesmo tipo de moeda e retornar mensagem
+    public String getMoedasRestantesSeCofreVazio() {
+        Map<Double, Integer> moedasNoCofre = CofreMoedas.contarMoedasPorTipo();
+        
+        if (moedasNoCofre.containsKey(valorMoeda)) {
+            return "";
+        } else {
+            return "Moedas restantes no tubo: " + quantidade + ". O cofre não tem moedas de " + valorMoeda;
+        }
+    }
 	
 	// Outras
 
