@@ -16,9 +16,6 @@ public class Moedeiro {
 		TuboMoeda centimo50 = new TuboMoeda(0.50, cofreMoedas);
 		TuboMoeda euro1 = new TuboMoeda(1, cofreMoedas);
 //		TuboMoeda euro2 = new TuboMoeda(2);
-	
-		
-		
 		
 		// Adicionando algumas moedas nos tubos
         centimo50.adicionarMoeda(100); // Adiciona 100 moedas de 0.50
@@ -32,8 +29,8 @@ public class Moedeiro {
         euro1.removerMoeda(); // Remove uma moeda de 1.00
 
         // Calculando o valor total de moedas em cada tubo e no cofre
-        System.out.println("Valor total no tubo de moedas de 0.50: " + centimo50.CalcularValorTotal() + "€");
-        System.out.println("Valor total no tubo de moedas de 1.00: " + euro1.CalcularValorTotal() + "€");
+        System.out.println("Valor total no tubo de moedas de 0.50: " + centimo50.calcularValorTotal() + "€");
+        System.out.println("Valor total no tubo de moedas de 1.00: " + euro1.calcularValorTotal() + "€");
         System.out.println("Valor total no cofre: " + cofreMoedas.calcularValorTotal() + "€");
 		
         System.out.println("- - - - -");
@@ -57,10 +54,13 @@ public class Moedeiro {
 	
 	// Método auxiliar para mostrar as moedas restantes no tubo
     private static void mostrarMoedasRestantes(TuboMoeda tubo) {
-        String mensagem = tubo.getMoedasRestantesSeCofreVazio();
-        if (!mensagem.isEmpty()) {
-            System.out.println(mensagem);
-        }
+//        String mensagem = tubo.getMoedasRestantesSeCofreVazio();
+//        if (!mensagem.isEmpty()) {
+//            System.out.println(mensagem);
+//        }
+
+        int numeroDeMoedas = tubo.getMoedasRestantesSeCofreVazio();
+        System.out.println("Numero de moedas restantes: " + numeroDeMoedas);
     }
 
 }

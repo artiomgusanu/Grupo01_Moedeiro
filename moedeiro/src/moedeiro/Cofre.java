@@ -17,14 +17,12 @@ public class Cofre {
 		super();
 		moedasArmazenadas = new HashMap<>();
 	}
+
 	// Comportamentos
 	public void adicionarMoeda(double valorMoeda, int quantidade) {
-        if (moedasArmazenadas.containsKey(valorMoeda)) {
-            int quantidadeAtual = moedasArmazenadas.get(valorMoeda);
-            moedasArmazenadas.put(valorMoeda, quantidadeAtual + quantidade);
-        } else {
-            moedasArmazenadas.put(valorMoeda, quantidade);
-        }
+        // e se quantidade for < 0 ?
+        final int quantidadeAtual =  moedasArmazenadas.getOrDefault(valorMoeda, 0);
+        moedasArmazenadas.put(valorMoeda, quantidadeAtual + quantidade);
     }
 
     public double calcularValorTotal() {
