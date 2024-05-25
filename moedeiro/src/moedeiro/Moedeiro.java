@@ -1,66 +1,90 @@
 package moedeiro;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class Moedeiro {
 
-	public static void main(String[] args) {
+    // Atributos
+    private Cofre cofre;
 
-		Cofre cofreMoedas = new Cofre();
-		
-//		TuboMoeda centimo1 = new TuboMoeda(0.01);
-//		TuboMoeda centimo2 = new TuboMoeda(0.02);
-//		TuboMoeda centimo5 = new TuboMoeda(0.05);
-//		TuboMoeda centimo10 = new TuboMoeda(0.10);
-//		TuboMoeda centimo20 = new TuboMoeda(0.20);
-		TuboMoeda centimo50 = new TuboMoeda(0.50, cofreMoedas);
-		TuboMoeda euro1 = new TuboMoeda(1, cofreMoedas);
-//		TuboMoeda euro2 = new TuboMoeda(2);
-		
-		// Adicionando algumas moedas nos tubos
-        centimo50.adicionarMoeda(100); // Adiciona 100 moedas de 0.50
-        euro1.adicionarMoeda(10); // Adiciona 150 moedas de 1.00
+    // Gets e Sets
 
-        // Testar o limite de capacidade
-        centimo50.adicionarMoeda(150); // Adiciona 150 moedas de 0.50
-        
-        // Removendo algumas moedas dos tubos
-        centimo50.removerMoeda(); // Remove uma moeda de 0.50
-        euro1.removerMoeda(); // Remove uma moeda de 1.00
-
-        // Calculando o valor total de moedas em cada tubo e no cofre
-        System.out.println("Valor total no tubo de moedas de 0.50: " + centimo50.calcularValorTotal() + "€");
-        System.out.println("Valor total no tubo de moedas de 1.00: " + euro1.calcularValorTotal() + "€");
-        System.out.println("Valor total no cofre: " + cofreMoedas.calcularValorTotal() + "€");
-		
-        System.out.println("- - - - -");
-        
-        // Conta e imprime o número de moedas de cada tipo
-        Map<Double, Integer> moedasPorTipo = cofreMoedas.contarMoedasPorTipo();
-        System.out.println("Moedas por tipo: " + moedasPorTipo);
-        
-        // Conta e imprime o número total de moedas no cofre
-        int totalMoedas = cofreMoedas.contarTotalMoedas();
-        System.out.println("Número total de moedas: " + totalMoedas);
-        
-        System.out.println("- - - - -");
-        
-     // Verificar e mostrar mensagens de moedas restantes no tubo se o cofre estiver vazio
-//        mostrarMoedasRestantes(centimo25);
-        mostrarMoedasRestantes(centimo50);
-        mostrarMoedasRestantes(euro1);
-		
-	}
-	
-	// Método auxiliar para mostrar as moedas restantes no tubo
-    private static void mostrarMoedasRestantes(TuboMoeda tubo) {
-//        String mensagem = tubo.getMoedasRestantesSeCofreVazio();
-//        if (!mensagem.isEmpty()) {
-//            System.out.println(mensagem);
-//        }
-
-        int numeroDeMoedas = tubo.getMoedasRestantesSeCofreVazio();
-        System.out.println("Numero de moedas restantes: " + numeroDeMoedas);
+    // Construtor
+    public Moedeiro(){
+        this.cofre = new Cofre();
     }
+
+    // Comportamentos
+    public Map<Double, Integer> efetuarTansacao(double valorReceber, Map<Double, TuboMoeda> tubosMoedas){
+        double valorTotalMoedasIntroduzidas = calcularValorTotalMoedasIntroduzidas(tubosMoedas);
+
+        if (valorTotalMoedasIntroduzidas >= valorReceber){
+            double troco = valorTotalMoedasIntroduzidas - valorReceber;
+            Map<Double, Integer> trocoDevolvido = calcularTroco(troco, tubosMoedas);
+
+            if (trocoDevolvido != null) {
+                for (Map.Entry<Double, TuboMoeda> entry : tubosMoedas.entrySet()) {
+                    double valorMoeda = entry.getKey();
+                    TuboMoeda tubo = entry.getValue();
+                    int quantidadeIntroduzida = tubo.getQuantidade();
+
+                    cofre.adicionarMoeda(valorMoeda, quantidadeIntroduzida);
+
+                    tubo.removerMoeda(quantidadeIntroduzida);
+                }
+
+                for (Map.Entry<Double, Integer> entry : trocoDevolvido.entrySet()){
+                    double valorMoeda = entry.getKey();
+                    int quantidade = entry.getValue();
+                    TuboMoeda tubo = tubosMoedas.get(valorMoeda);
+                    if (tubo != null) {
+                        tubo.removerMoeda(quantidade);
+                    }
+                }
+                return trocoDevolvido;      // Devolver as moedas caso sejam insuficientes
+            }
+        }
+        return null;
+    }
+
+    public double calcularValorTotalMoedasIntroduzidas(Map<Double, TuboMoeda> tubosMoedas){
+        double valorTotal = 0;
+        for (TuboMoeda tubo : tubosMoedas.values()){
+            valorTotal += tubo.calcularValorTotal();
+        }
+        return valorTotal;
+    }
+
+    private Map<Double, Integer> calcularTroco(double troco, Map<Double, TuboMoeda> tubosMoedas){
+        Map<Double, Integer> trocoDevolvido = new TreeMap<>((a, b) -> b.compareTo(a));
+        for (Map.Entry<Double, TuboMoeda> entry : tubosMoedas.entrySet()){
+            double valorMoeda = entry.getKey();
+            TuboMoeda tubo = entry.getValue();
+            int quantidadeNoTubo = tubo.getQuantidade();
+
+            int quantidadeDevolver = (int) (troco / valorMoeda);
+            if (quantidadeDevolver > 0) {
+                int quantidadeUsada = Math.min(quantidadeDevolver, quantidadeNoTubo);
+                if (quantidadeUsada > 0) {
+                    trocoDevolvido.put(valorMoeda, quantidadeUsada);
+                    troco -= quantidadeUsada * valorMoeda;
+                }
+            }
+
+            if (troco == 0) {
+                break;
+            }
+        }
+
+        if (troco == 0) {
+            return trocoDevolvido;
+        } else {
+            return null;                // Não foi possível devolver o troco exato
+        }
+    }
+
+    // Outras
 
 }

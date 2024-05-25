@@ -21,6 +21,9 @@ public class Cofre {
 	// Comportamentos
 	public void adicionarMoeda(double valorMoeda, int quantidade) {
         // e se quantidade for < 0 ?
+        if (quantidade < 0) {
+            throw new IllegalArgumentException("A quantidade de moedas não pode ser negativo");
+        }
         final int quantidadeAtual =  moedasArmazenadas.getOrDefault(valorMoeda, 0);
         moedasArmazenadas.put(valorMoeda, quantidadeAtual + quantidade);
     }
@@ -33,8 +36,8 @@ public class Cofre {
         return valorTotal;
     }
     
-    // Método para contar o número de moedas de cada tipo						(REVER)
-    public Map<Double, Integer> contarMoedasPorTipo() {
+    // Método para contar o número de moedas de cada tipo  /  (REVER) Explicar melhor o porquê de termos usado o clone
+    public Map<Double, Integer> getMoedasPorTipo() {
         return new HashMap<>(moedasArmazenadas);
     }
     
@@ -47,7 +50,6 @@ public class Cofre {
         return totalMoedas;
     }
 
-    
-	// Outras
+    // Outras
 
 }

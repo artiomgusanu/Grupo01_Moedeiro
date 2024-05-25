@@ -39,15 +39,16 @@ public class TuboMoeda {
                 cofreMoedas.adicionarMoeda(valorMoeda, excesso);
             }
         } else {
-            // erro: valor inserido negativo
+            throw new IllegalArgumentException("A quantidade de moedas não pode ser negativa.");
         }
         return quantidade;
     }
 
-    public void removerMoeda() {
-        if (quantidade > 0) {
-            quantidade--;
+    public void removerMoeda(int quantidade) {
+        if (quantidade > this.quantidade) {
+            throw new IllegalArgumentException("Não há moedas suficientes no tubo.");
         }
+        this.quantidade -= quantidade;
     }
 
     public double calcularValorTotal() {
@@ -55,10 +56,12 @@ public class TuboMoeda {
         return valorTotal;
     }
 
+
+
     // Verificar se o cofre ainda tem o mesmo tipo de moeda e retornar mensagem
     public int getMoedasRestantesSeCofreVazio() {
-		Integer numMoedas = cofreMoedas.contarMoedasPorTipo().get(valorMoeda);
-		return numMoedas == null ? 0 : numMoedas;
+        Integer numMoedas = cofreMoedas.getMoedasPorTipo().getOrDefault(valorMoeda, 0);
+        return numMoedas == null ? 0 : numMoedas;
 //
 //        Map<Double, Integer> moedasNoCofre = cofreMoedas.contarMoedasPorTipo();
 //
