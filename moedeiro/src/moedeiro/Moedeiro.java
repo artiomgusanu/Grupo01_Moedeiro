@@ -1,6 +1,7 @@
 package moedeiro;
 
 import moedeiro.exception.MoedasInsuficientesException;
+import moedeiro.exception.QuantidadeNegativaException;
 import moedeiro.exception.TransacaoException;
 
 import java.util.HashMap;
@@ -42,7 +43,7 @@ public class Moedeiro {
      */
 
 
-    public ResultadoTransacao efetuarTansacao(double valorReceber, Map<Double, TuboMoeda> tubosMoedas) throws TransacaoException, MoedasInsuficientesException {
+    public ResultadoTransacao efetuarTansacao(double valorReceber, Map<Double, TuboMoeda> tubosMoedas) throws TransacaoException, MoedasInsuficientesException, QuantidadeNegativaException {
         double valorTotalMoedasIntroduzidas = calcularValorTotalMoedasIntroduzidas(tubosMoedas);
 
         if (valorTotalMoedasIntroduzidas >= valorReceber) {
