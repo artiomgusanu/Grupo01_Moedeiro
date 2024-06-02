@@ -2,6 +2,10 @@ package moedeiro;
 
 import java.util.Map;
 
+import moedeiro.exception.ExcessoMoedasException;
+import moedeiro.exception.MoedasInsuficientesException;
+import moedeiro.exception.MoedeiroException;
+import moedeiro.exception.QuantidadeInvalidaException;
 import moedeiro.validator.ValidarMoedasValidator;
 
 public class TuboMoeda {
@@ -29,7 +33,7 @@ public class TuboMoeda {
     }
 
     // Comportamentos
-    public int adicionarMoeda(int adicionar) {
+    public int adicionarMoeda(int adicionar) throws QuantidadeInvalidaException, ExcessoMoedasException {
         if (ValidarMoedasValidator.validarQuantidade(adicionar)) {
             if (quantidade + adicionar <= CAPACIDADE_MAXIMA) {
                 quantidade += adicionar;
@@ -37,16 +41,17 @@ public class TuboMoeda {
                 int excesso = quantidade + adicionar - CAPACIDADE_MAXIMA;
                 quantidade = CAPACIDADE_MAXIMA;
                 cofreMoedas.adicionarMoeda(valorMoeda, excesso);
+                throw new ExcessoMoedasException("Quantidade excede a capacidade máxima do tubo.", excesso);
             }
         } else {
-            throw new IllegalArgumentException("A quantidade de moedas não pode ser negativa.");
+            throw new QuantidadeInvalidaException("A quantidade de moedas não pode ser negativa.");
         }
         return quantidade;
     }
 
-    public void removerMoeda(int quantidade) {
+    public void removerMoeda(int quantidade) throws MoedasInsuficientesException{
         if (quantidade > this.quantidade) {
-            throw new IllegalArgumentException("Não há moedas suficientes no tubo.");
+            throw new MoedasInsuficientesException("Não há moedas suficientes no tubo.");
         }
         this.quantidade -= quantidade;
     }

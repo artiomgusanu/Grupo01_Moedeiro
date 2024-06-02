@@ -1,9 +1,13 @@
 package moedeiro;
 
+import moedeiro.exception.ExcessoMoedasException;
+import moedeiro.exception.MoedasInsuficientesException;
+import moedeiro.exception.QuantidadeInvalidaException;
+
 import java.util.Map;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExcessoMoedasException, QuantidadeInvalidaException, MoedasInsuficientesException {
         Cofre cofreMoedas = new Cofre();
 
 //		TuboMoeda centimo1 = new TuboMoeda(0.01);

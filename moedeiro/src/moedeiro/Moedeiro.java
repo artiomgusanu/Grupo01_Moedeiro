@@ -1,5 +1,8 @@
 package moedeiro;
 
+import moedeiro.exception.MoedasInsuficientesException;
+import moedeiro.exception.TransacaoException;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -17,7 +20,7 @@ public class Moedeiro {
     }
 
     // Comportamentos
-    public Map<Double, Integer> efetuarTansacao(double valorReceber, Map<Double, TuboMoeda> tubosMoedas){
+    public ResultadoTransacao efetuarTansacao(double valorReceber, Map<Double, TuboMoeda> tubosMoedas) throws TransacaoException, MoedasInsuficientesException {
         double valorTotalMoedasIntroduzidas = calcularValorTotalMoedasIntroduzidas(tubosMoedas);
 
         if (valorTotalMoedasIntroduzidas >= valorReceber){
@@ -43,10 +46,18 @@ public class Moedeiro {
                         tubo.removerMoeda(quantidade);
                     }
                 }
-                return trocoDevolvido;      // Devolver as moedas caso sejam insuficientes
+                return new ResultadoTransacao(trocoDevolvido,true);      // Devolver as moedas caso sejam insuficientes
             }
         }
-        return null;
+        Map<Double, Integer> moedasDevolvidas = new HashMap<>();
+        for (Map.Entry<Double, TuboMoeda> entry : tubosMoedas.entrySet()) {
+            double valorMoeda = entry.getKey();
+            TuboMoeda tubo = entry.getValue();
+            int quantidadeIntroduzida = tubo.getQuantidade();
+            moedasDevolvidas.put(valorMoeda, quantidadeIntroduzida);
+        }
+
+        throw new TransacaoException("Não foi possível realizar a transação. Quantia insuficiente para troco.", moedasDevolvidas);
     }
 
     public double calcularValorTotalMoedasIntroduzidas(Map<Double, TuboMoeda> tubosMoedas){
