@@ -7,8 +7,18 @@ import moedeiro.exception.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Classe Main é responsável por iniciar a simulação de uma máquina de vendas.
+ */
 public class Main {
 
+
+	/**
+	 * Método principal que inicia a simulação da máquina de vendas.
+	 *
+	 * @throws ExcessoMoedasException   exceção lançada quando há excesso de moedas no tubo
+	 * @throws QuantidadeInvalidaException exceção lançada quando a quantidade de moedas é inválida
+	 */
 	public static void main(String[] args) throws ExcessoMoedasException, QuantidadeInvalidaException {
 
 		//Criar máquina
@@ -51,6 +61,6 @@ public class Main {
 
 
 	}
-	
+
 
 }

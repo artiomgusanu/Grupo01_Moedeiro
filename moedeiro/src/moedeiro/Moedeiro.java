@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+
+/**
+ * A classe Moedeiro representa o sistema de transações do dinheiro em uma máquina de vendas.
+ */
 public class Moedeiro {
 
     // Atributos
@@ -15,11 +19,23 @@ public class Moedeiro {
     // Gets e Sets
 
     // Construtor
+    /**
+     * Construtor da classe Moedeiro.
+     */
     public Moedeiro(){
         this.cofre = new Cofre();
     }
 
     // Comportamentos
+    /**
+     * Realiza uma transação monetária.
+     *
+     * @param valorReceber o valor a ser recebido na transação
+     * @param tubosMoedas os tubos de moedas disponíveis para a transação
+     * @return o resultado da transação
+     * @throws TransacaoException exceção lançada em caso de falha na transação
+     * @throws MoedasInsuficientesException exceção lançada se não houver moedas suficientes para o troco
+     */
     public ResultadoTransacao efetuarTansacao(double valorReceber, Map<Double, TuboMoeda> tubosMoedas) throws TransacaoException, MoedasInsuficientesException {
         double valorTotalMoedasIntroduzidas = calcularValorTotalMoedasIntroduzidas(tubosMoedas);
 
@@ -60,6 +76,12 @@ public class Moedeiro {
         throw new TransacaoException("Não foi possível realizar a transação. Quantia insuficiente para troco.", moedasDevolvidas);
     }
 
+    /**
+     * Calcula o valor total das moedas introduzidas na transação.
+     *
+     * @param tubosMoedas os tubos de moedas disponíveis para a transação
+     * @return o valor total das moedas introduzidas
+     */
     public double calcularValorTotalMoedasIntroduzidas(Map<Double, TuboMoeda> tubosMoedas){
         double valorTotal = 0;
         for (TuboMoeda tubo : tubosMoedas.values()){
