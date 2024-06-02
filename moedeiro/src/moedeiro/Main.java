@@ -6,6 +6,9 @@ import moedeiro.exception.QuantidadeInvalidaException;
 
 import java.util.Map;
 
+/**
+ * A classe Main é responsável por iniciar a simulação do funcionamento dos tubos de moedas e do cofre.
+ */
 public class Main {
     public static void main(String[] args) throws ExcessoMoedasException, QuantidadeInvalidaException, MoedasInsuficientesException {
         Cofre cofreMoedas = new Cofre();
