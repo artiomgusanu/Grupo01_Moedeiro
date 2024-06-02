@@ -8,6 +8,10 @@ import moedeiro.exception.MoedeiroException;
 import moedeiro.exception.QuantidadeInvalidaException;
 import moedeiro.validator.ValidarMoedasValidator;
 
+/**
+ * Classe que representa um tubo de moedas em um Moedeiro.
+ */
+
 public class TuboMoeda {
 
     // Atributos
@@ -26,6 +30,14 @@ public class TuboMoeda {
     }
 
     // Construtor
+
+    /**
+     * Construtor que inicializa um novo tubo de moedas com um valor específico e um cofre de moedas associado.
+     *
+     * @param valorMoeda   O valor da moeda associada ao tubo.
+     * @param cofreMoedas  O cofre armazena as moedas.
+     */
+
     public TuboMoeda(double valorMoeda, Cofre cofreMoedas) {
         this.valorMoeda = valorMoeda;
         this.quantidade = 0;
@@ -33,6 +45,16 @@ public class TuboMoeda {
     }
 
     // Comportamentos
+
+    /**
+     * Adiciona moedas ao tubo.
+     *
+     * @param adicionar A quantidade de moedas a ser adicionada.
+     * @return A quantidade atual de moedas no tubo após a adição.
+     * @throws QuantidadeInvalidaException Se a quantidade de moedas a ser adicionada for inválida (negativa ou zero)
+     * @throws ExcessoMoedasException se a quantidade exceder a capacidade máxima do tubo.
+     */
+
     public int adicionarMoeda(int adicionar) throws QuantidadeInvalidaException, ExcessoMoedasException {
         if (ValidarMoedasValidator.validarQuantidade(adicionar)) {
             if (quantidade + adicionar <= CAPACIDADE_MAXIMA) {
@@ -49,12 +71,25 @@ public class TuboMoeda {
         return quantidade;
     }
 
+    /**
+     * Remove moedas do tubo.
+     *
+     * @param quantidade A quantidade de moedas a ser removida.
+     * @throws MoedasInsuficientesException Se a quantidade for maior do que a quantidade atual no tubo.
+     */
+
     public void removerMoeda(int quantidade) throws MoedasInsuficientesException{
         if (quantidade > this.quantidade) {
             throw new MoedasInsuficientesException("Não há moedas suficientes no tubo.");
         }
         this.quantidade -= quantidade;
     }
+
+    /**
+     * Calcula o valor total das moedas no tubo.
+     *
+     * @return O valor total das moedas no tubo.
+     */
 
     public double calcularValorTotal() {
         final double valorTotal = valorMoeda * quantidade;
@@ -64,17 +99,17 @@ public class TuboMoeda {
 
 
     // Verificar se o cofre ainda tem o mesmo tipo de moeda e retornar mensagem
+
+    /**
+     * Obtém o número de moedas restantes no tubo se o cofre estiver vazio.
+     *
+     * @return o número de moedas restantes no tubo se o cofre estiver vazio
+     */
+
+
     public int getMoedasRestantesSeCofreVazio() {
         Integer numMoedas = cofreMoedas.getMoedasPorTipo().getOrDefault(valorMoeda, 0);
         return numMoedas == null ? 0 : numMoedas;
-//
-//        Map<Double, Integer> moedasNoCofre = cofreMoedas.contarMoedasPorTipo();
-//
-//        if (moedasNoCofre.containsKey(valorMoeda)) {
-//            return "";
-//        } else {
-//            return "Moedas restantes no tubo: " + quantidade + ". O cofre não tem moedas de " + valorMoeda;
-//        }
     }
 
     // Outras
